@@ -5,7 +5,7 @@ const reservationSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
-    minLength: [3, "First name must be of at least 3 Characters."],
+    minLength: [2, "First name must be of at least 2 Characters."],
     maxLength: [30, "First name cannot exceed 30 Characters."],
   },
   lastName: {

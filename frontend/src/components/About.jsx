@@ -13,7 +13,13 @@ const About = () => {
               <p>The only thing we're serious about is food.</p>
             </div>
             <p className="mid">
-            At our restaurant, the only thing we're serious about is food. We believe in delivering a culinary experience that delights your taste buds and leaves you craving more. Our chefs are passionate about creating mouthwatering dishes using the freshest ingredients, ensuring every meal is a celebration of flavor. Join us for a dining experience where food takes center stage, and everything else is simply the backdrop. Welcome to our restaurant, where good food is the only rule we follow.
+              At our restaurant, quality is our top priority. Every dish is prepared with fresh, handpicked ingredients to ensure the best taste and nutrition. We strictly follow high hygiene and safety standards in our kitchen, so every meal is clean, healthy, and trustworthy.
+
+              Our chefs focus on authentic flavors, perfect seasoning, and consistent taste in every serving. We avoid artificial colors and harmful preservatives, delivering food that is pure, flavorful, and satisfying.
+
+              From starters to main courses, each dish is cooked with care, passion, and attention to detail, ensuring that our customers enjoy a memorable dining experience every time they visit.
+
+              ✨ Fresh Ingredients | Hygienic Preparation | Authentic Taste | Consistent Quality
             </p>
             <Link to={"/"}>
               Explore Menu{" "}

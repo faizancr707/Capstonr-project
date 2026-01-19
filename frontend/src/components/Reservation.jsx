@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import axios from "axios";
-import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -11,15 +10,33 @@ const Reservation = () => {
   const [email, setEmail] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [phone, setPhone] = useState(0);
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleReservation = async (e) => {
     e.preventDefault();
+
+    // Basic validation
+    if (!firstName || !lastName || !email || !phone || !date || !time) {
+      toast.error("Please fill all fields");
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/reservation/send",
-        { firstName, lastName, email, phone, date, time },
+        "http://localhost:3000/reservation/send",
+        {
+          firstName,
+          lastName,
+          email,
+          phone,
+          date,
+          time,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -27,16 +44,28 @@ const Reservation = () => {
           withCredentials: true,
         }
       );
-      toast.success(data.message);
+
+      toast.success(data.message || "Reservation successful!");
+
+      // Reset form
       setFirstName("");
       setLastName("");
-      setPhone(0);
       setEmail("");
-      setTime("");
+      setPhone("");
       setDate("");
+      setTime("");
+
       navigate("/success");
     } catch (error) {
-      toast.error(error.response.data.message);
+      if (error.response) {
+        toast.error(error.response.data.message || "Something went wrong");
+      } else if (error.request) {
+        toast.error("Backend server is not running");
+      } else {
+        toast.error(error.message);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,13 +73,15 @@ const Reservation = () => {
     <section className="reservation" id="reservation">
       <div className="container">
         <div className="banner">
-          <img src="/reservation.png" alt="res" />
+          <img src="/reservation.png" alt="reservation" />
         </div>
+
         <div className="banner">
           <div className="reservation_form_box">
             <h1>MAKE A RESERVATION</h1>
             <p>For Further Questions, Please Call</p>
-            <form>
+
+            <form onSubmit={handleReservation}>
               <div>
                 <input
                   type="text"
@@ -65,20 +96,20 @@ const Reservation = () => {
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
+
               <div>
                 <input
                   type="date"
-                  placeholder="Date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                 />
                 <input
                   type="time"
-                  placeholder="Time"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
                 />
               </div>
+
               <div>
                 <input
                   type="email"
@@ -88,14 +119,15 @@ const Reservation = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <input
-                  type="number"
+                  type="tel"
                   placeholder="Phone"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
-              <button type="submit" onClick={handleReservation}>
-                RESERVE NOW{" "}
+
+              <button type="submit" disabled={loading}>
+                {loading ? "PLEASE WAIT..." : "RESERVE NOW"}
                 <span>
                   <HiOutlineArrowNarrowRight />
                 </span>
